@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Statut du Service – STARLINK RDC</title>
+  <meta name="description" content="Vérifiez le statut en temps réel du service Starlink en RDC." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .status-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .status-header {
+      text-align: center;
+      padding: 3rem 0 2rem;
+    }
+    .status-header h1 { font-size: 2rem; font-weight: 800; }
+    .status-header p  { color: rgba(255,255,255,0.7); margin-top: 0.5rem; }
+
+    .status-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .status-indicator {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-indicator.green  { background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+    .status-indicator.yellow { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+    .status-indicator.red    { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+
+    .status-label { font-weight: 600; font-size: 0.98rem; }
+    .status-desc  { font-size: 0.83rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; }
+
+    .status-badge-green  { color: #22c55e; font-size: 0.82rem; font-weight: 700; margin-left: auto; }
+    .status-badge-yellow { color: #f59e0b; font-size: 0.82rem; font-weight: 700; margin-left: auto; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <span>STARLINK</span>
+        <span class="nav-subtitle">Revendeur RDC</span>
+      </div>
+      <div class="nav-links">
+        <a href="status.html">Statut</a>
+        <a href="index.html">Forfaits</a>
+        <a href="orders.html">Commandes</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="status-container">
+    <div class="status-header">
+      <h1>Statut du Service</h1>
+      <p>Mise à jour en temps réel du fonctionnement de nos services</p>
+    </div>
+
+    <div class="status-card">
+      <div class="status-indicator green"></div>
+      <div>
+        <div class="status-label">Connexion Starlink</div>
+        <div class="status-desc">Réseau satellitaire opérationnel</div>
+      </div>
+      <span class="status-badge-green">Opérationnel</span>
+    </div>
+
+    <div class="status-card">
+      <div class="status-indicator green"></div>
+      <div>
+        <div class="status-label">Paiement Airtel Money</div>
+        <div class="status-desc">Traitement des transactions en ligne</div>
+      </div>
+      <span class="status-badge-green">Opérationnel</span>
+    </div>
+
+    <div class="status-card">
+      <div class="status-indicator green"></div>
+      <div>
+        <div class="status-label">Activation des Forfaits</div>
+        <div class="status-desc">Activation automatique après paiement</div>
+      </div>
+      <span class="status-badge-green">Opérationnel</span>
+    </div>
+
+    <div class="status-card">
+      <div class="status-indicator yellow"></div>
+      <div>
+        <div class="status-label">Support Client</div>
+        <div class="status-desc">Délai de réponse légèrement augmenté</div>
+      </div>
+      <span class="status-badge-yellow">Dégradé</span>
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>STARLINK RDC</h4>
+        <p>Votre revendeur officiel Starlink en République Démocratique du Congo.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <a href="index.html">Forfaits</a>
+        <a href="status.html">Statut du Service</a>
+        <a href="orders.html">Mes Commandes</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Contact</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 STARLINK Revendeur RDC &mdash; Tous droits réservés</p>
+    </div>
+  </footer>
+
+</body>
+</html>

